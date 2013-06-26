@@ -1,0 +1,156 @@
+#!/bin/bash
+
+file='.coke'
+params=""
+options=""
+
+standard=""
+command="phpcs"
+
+filesAllowed=""
+filesIgnored=""
+
+ignored=0
+allowed=0
+verbose=0
+
+function allow
+{
+    if [ -z "$filesIgnored" ]
+    then
+        filesAllowed="$1"
+    else
+        filesAllowed="$filesAllowed $1"
+    fi
+}
+
+function ignore
+{
+    if [ -z "$filesIgnored" ]
+    then
+        filesIgnored="$1"
+    else
+        filesIgnored="$filesIgnored,$1"
+    fi
+}
+
+function success
+{
+    echo "[$(tput bold)$(tput setaf 2)SUCCESS$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    exit 0
+}
+
+function fail
+{
+    echo "[$(tput bold)$(tput setaf 1)FAIL$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    exit 1
+}
+
+function warning
+{
+    echo "[$(tput bold)$(tput setaf 3)WARNING$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+}
+
+function info
+{
+    echo "[$(tput bold)$(tput setaf 4)INFO$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+}
+
+# Résolution des options
+
+while [ ! -z "$1" ]
+do
+    CUR_PARAM="$1"
+
+    if [ "${CUR_PARAM:0:2}" =  "--" ]               # Si c'est un paramétre
+    then
+        if [ "${CUR_PARAM:2:9}" =  "standard=" ]
+        then
+            standard="${CUR_PARAM:11}"
+        elif [ "${CUR_PARAM:2:7}" =  "ignore=" ]
+        then 
+            ignore "${CUR_PARAM:9}"
+            ignored=1
+        else
+            params="$params $CUR_PARAM"
+        fi
+    elif [ "${CUR_PARAM:0:1}" = "-" ]               # Si c'est un option
+    then
+        case "${CUR_PARAM:1:1}" in
+            v)
+                verbose=1
+            ;;
+        esac
+        
+        options="$options ${CUR_PARAM}"
+    else                                            # sinon c'est un fichier
+        allow "$CUR_PARAM"
+        allowed=1
+    fi
+
+    shift
+done
+
+# Résolution des fichiers à tester
+
+if [ -e "$file" ]
+then
+    output=$( grep "^[^\#]" $file )
+    
+    for ligne in $output
+    do
+        if [ "${ligne:0:8}" = 'command=' ]
+        then
+            command="${ligne:8}"
+        elif [ -z "$standard" ] && [ "${ligne:0:9}" = 'standard=' ]
+        then
+            standard="${ligne:9}"
+        elif  [ "$verbose" -eq 0 ] && [ "${ligne:0:8}" = 'verbose=' ] && [ "${ligne:8}" = "true" ]
+        then
+            verbose=1
+        elif [ "$ignored" -eq 0 ] && [ "${ligne:0:1}" = '!' ]
+        then
+            ignore "${ligne:1}"
+        elif [ "$allowed" -eq 0 ] && [ ! -z "$ligne" ]
+        then
+            allow "$ligne"
+        fi
+    done
+else
+    warning "No config file found"
+fi
+
+if [ "$verbose" -eq 1 ]
+then
+    info "Starting sniffing"
+fi
+
+# Préparation du lancement de la commande
+
+if [ ! -z "$filesIgnored" ]
+then
+    filesIgnored="--ignore=$filesIgnored"
+fi
+
+if [ ! -z "$standard" ]
+then
+    standard="--standard=$standard"
+else
+    fail "No coding standard definition provided"
+fi
+
+# Lancement de la commande
+
+if [ ! -z "$filesAllowed" ]
+then
+    $command $filesAllowed $filesIgnored $standard $options $params
+    
+    if [ "$?" -eq 1 ]
+    then
+        fail "Some files do not match with \"${standard:11}\" requirements"
+    fi
+else
+    warning "There was no file to test"
+fi
+
+success "All files match with \"${standard:11}\" requirements"
