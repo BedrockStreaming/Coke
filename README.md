@@ -45,3 +45,11 @@ The order of arguments is not important
 `--standard=Symfony2`            Standard to use for check  
 `--ignore=Tests,src/OldFile.php` URL patterns to ignore in the check  
 `-v`                             Use verbose mode  
+
+## Credits
+
+Developped by the Cytron Team of [M6 Web](http://tech.m6web.fr/).
+
+## License
+
+Coke is licensed under the [MIT license](LICENSE.md).
