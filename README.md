@@ -33,7 +33,7 @@ $ coke
 
 ## Run the command with arguments
 
-When you run the command, you can override `.coke` settings by passing directly configuration as arguments :
+You can override `.coke` settings by passing directly configuration as arguments to the command :
 
 ```shell
 $ coke src test.php --standard=Symfony2 --ignore=Tests,src/OldFile.php -v
@@ -41,7 +41,7 @@ $ coke src test.php --standard=Symfony2 --ignore=Tests,src/OldFile.php -v
 
 The order of arguments is not important
 
-`src test.php`                   Files/Directories to include in the check
-`--standard=Symfony2`            Standard to use for check
-`--ignore=Tests,src/OldFile.php` URL patterns to ignore in the check
-`-v`                             Use verbose mode
+`src test.php`                   Files/Directories to include in the check  
+`--standard=Symfony2`            Standard to use for check  
+`--ignore=Tests,src/OldFile.php` URL patterns to ignore in the check  
+`-v`                             Use verbose mode  
