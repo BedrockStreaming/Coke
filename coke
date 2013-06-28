@@ -16,7 +16,7 @@ verbose=0
 
 function allow
 {
-    if [ -z "$filesIgnored" ]
+    if [ -z "$filesAllowed" ]
     then
         filesAllowed="$1"
     else
