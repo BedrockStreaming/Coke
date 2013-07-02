@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-file='.coke'
+file=".coke"
 params=""
 options=""
 
@@ -58,32 +58,32 @@ function info
 
 # Résolution des options
 
-while [ ! -z "$1" ]
+while [ $# -ne 0 ]
 do
     CUR_PARAM="$1"
 
-    if [ "${CUR_PARAM:0:2}" =  "--" ]               # Si c'est un paramétre
+    if [ "${CUR_PARAM:0:2}" =  "--" ]            # it's a parameter
     then
         if [ "${CUR_PARAM:2:9}" =  "standard=" ]
         then
             standard="${CUR_PARAM:11}"
         elif [ "${CUR_PARAM:2:7}" =  "ignore=" ]
-        then 
+        then
             ignore "${CUR_PARAM:9}"
             ignored=1
         else
             params="$params $CUR_PARAM"
         fi
-    elif [ "${CUR_PARAM:0:1}" = "-" ]               # Si c'est un option
+    elif [ "${CUR_PARAM:0:1}" = "-" ]            # it's an option
     then
         case "${CUR_PARAM:1:1}" in
             v)
                 verbose=1
             ;;
         esac
-        
+
         options="$options ${CUR_PARAM}"
-    else                                            # sinon c'est un fichier
+    else                                         # it's a file
         allow "$CUR_PARAM"
         allowed=1
     fi
@@ -91,27 +91,27 @@ do
     shift
 done
 
-# Résolution des fichiers à tester
+# Resolve files to test
 
 if [ -e "$file" ]
 then
     output=$( grep "^[^\#]" $file )
-    
+
     for ligne in $output
     do
-        if [ "${ligne:0:8}" = 'command=' ]
+        if [ "${ligne:0:8}" = "command=" ]
         then
             command="${ligne:8}"
-        elif [ -z "$standard" ] && [ "${ligne:0:9}" = 'standard=' ]
+        elif [ -z "$standard" ] && [ "${ligne:0:9}" = "standard=" ]
         then
             standard="${ligne:9}"
-        elif  [ "$verbose" -eq 0 ] && [ "${ligne:0:8}" = 'verbose=' ] && [ "${ligne:8}" = "true" ]
+        elif  [ "$verbose" -eq 0 ] && [ "${ligne:0:8}" = "verbose=" ] && [ "${ligne:8}" = "true" ]
         then
             verbose=1
-        elif [ "$ignored" -eq 0 ] && [ "${ligne:0:1}" = '!' ]
+        elif [ "$ignored" -eq 0 ] && [ "${ligne:0:1}" = "!" ]
         then
             ignore "${ligne:1}"
-        elif [ "$allowed" -eq 0 ] && [ ! -z "$ligne" ]
+        elif [ "$allowed" -eq 0 ] && [ -n "$ligne" ]
         then
             allow "$ligne"
         fi
@@ -125,27 +125,27 @@ then
     info "Starting sniffing"
 fi
 
-# Préparation du lancement de la commande
+# Prepare command
 
-if [ ! -z "$filesIgnored" ]
+if [ -n "$filesIgnored" ]
 then
     filesIgnored="--ignore=$filesIgnored"
 fi
 
-if [ ! -z "$standard" ]
+if [ -n "$standard" ]
 then
     standard="--standard=$standard"
 else
     fail "No coding standard definition provided"
 fi
 
-# Lancement de la commande
+# Punch it!
 
-if [ ! -z "$filesAllowed" ]
+if [ -n "$filesAllowed" ]
 then
     $command $filesAllowed $filesIgnored $standard $options $params
-    
-    if [ "$?" -eq 1 ]
+
+    if [ $? -ne 0 ]
     then
         fail "Some files do not match with \"${standard:11}\" requirements"
     fi
