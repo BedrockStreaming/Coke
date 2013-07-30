@@ -49,6 +49,7 @@ function fail
 function warning
 {
     echo "[$(tput bold)$(tput setaf 3)WARNING$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    exit 0
 }
 
 function info
