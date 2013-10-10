@@ -47,7 +47,7 @@ The order of arguments is not important
 `-v`                             Use verbose mode  
 
 
-## Additionals arguments
+## Additional arguments
 
 You can use any phpcs arguments ([documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options))
 
