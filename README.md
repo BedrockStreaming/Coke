@@ -46,6 +46,17 @@ The order of arguments is not important
 `--ignore=Tests,src/OldFile.php` URL patterns to ignore in the check  
 `-v`                             Use verbose mode  
 
+
+## Additional arguments
+
+You can use any phpcs arguments ([documentation](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Configuration-Options))
+
+For example if you want to generate a report with your favorite CI tools you can run 
+
+```shell
+$ coke --report-checkstyle=checkstyle.xml
+```
+
 ## Credits
 
 Developped by the Cytron Team of [M6 Web](http://tech.m6web.fr/).
