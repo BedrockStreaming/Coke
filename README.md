@@ -59,7 +59,7 @@ $ coke --report-checkstyle=checkstyle.xml
 
 ## Credits
 
-Developped by the Cytron Team of [M6 Web](http://tech.m6web.fr/).
+Developped by the [Cytron Team](http://cytron.fr/) of [M6 Web](http://tech.m6web.fr/).
 
 ## License
 
