@@ -67,18 +67,6 @@ Add coke in the require-dev section of your composer.json :
     },
 ```
 
-For now, coke is not on packagist, you have to add it in your repository section : 
-
-```json
-    "repositories": [
-    {
-        "type": "git",
-        "url": "git://github.com/agallou/Coke.git",
-        "branch": "composer"
-    }
-    ]
-```
-
 By default composer will add a symlink to coke in vendor/bin/coke.
 
 If you want to change it, add this in your composer.json (more information about this in the [composer documentation](http://getcomposer.org/doc/articles/vendor-binaries.md) :
