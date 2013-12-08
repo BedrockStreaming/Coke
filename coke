@@ -5,7 +5,14 @@ params=""
 options=""
 
 standard=""
-command="phpcs"
+
+composerCommand="vendor/squizlabs/php_codesniffer/scripts/phpcs"
+
+command="phpcs";
+if [ -e "$composerCommand" ]
+then
+  command="$composerCommand"
+fi
 
 filesAllowed=""
 filesIgnored=""
