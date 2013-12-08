@@ -63,7 +63,7 @@ Add coke in the require-dev section of your composer.json :
 
 ```json
     "require-dev": {
-        "m6web/coke" : "*@dev"
+        "m6web/coke" : "~1.0"
     },
 ```
 
