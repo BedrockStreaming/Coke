@@ -61,7 +61,7 @@ $ coke --report-checkstyle=checkstyle.xml
 
 Add coke in the require-dev section of your composer.json :
 
-```json
+```
     "require-dev": {
         "m6web/coke" : "~1.0"
     },
@@ -69,10 +69,10 @@ Add coke in the require-dev section of your composer.json :
 
 By default composer will add a symlink to coke in vendor/bin/coke.
 
-If you want to change it, add this in your composer.json (more information about this in the [composer documentation](http://getcomposer.org/doc/articles/vendor-binaries.md) :
+If you want to change it, add this in your composer.json (more information about this in the [composer documentation](http://getcomposer.org/doc/articles/vendor-binaries.md)) :
 
 ```
-     "config": {
+    "config": {
         "bin-dir": "bin"
     },
 ```
