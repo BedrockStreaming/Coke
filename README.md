@@ -10,6 +10,9 @@ Create a `.coke` file at your project root :
 # Command used to launch PHP CodeSniffer (optional - default: phpcs)
 command=phpcs
  
+# Path used to load Standards (optional)
+standard-path=path/to/PHPCS/Standards/
+
 # Standard used by PHP CodeSniffer (required)
 standard=Symfony2
  

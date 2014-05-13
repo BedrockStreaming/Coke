@@ -3,8 +3,8 @@
 file=".coke"
 params=""
 options=""
-
 standard=""
+standardPath=""
 
 composerCommand="vendor/squizlabs/php_codesniffer/scripts/phpcs"
 
@@ -79,6 +79,9 @@ do
         then
             ignore "${CUR_PARAM:9}"
             ignored=1
+        elif [ "${CUR_PARAM:2:14}" = "standard-path=" ]
+        then
+            standardPath="${CUR_PARAM:16}"
         else
             params="$params $CUR_PARAM"
         fi
@@ -110,6 +113,9 @@ then
         if [ "${ligne:0:8}" = "command=" ]
         then
             command="${ligne:8}"
+        elif [ -z "$standardPath" ] && [ "${ligne:0:14}" = "standard-path=" ]
+        then
+            standardPath="${ligne:14}"
         elif [ -z "$standard" ] && [ "${ligne:0:9}" = "standard=" ]
         then
             standard="${ligne:9}"
@@ -147,11 +153,16 @@ else
     fail "No coding standard definition provided"
 fi
 
+if [ -n "$standardPath" ]
+then
+    standardPath="--config-set installed_paths $standardPath"
+fi
+
 # Punch it!
 
 if [ -n "$filesAllowed" ]
 then
-    $command $filesAllowed $filesIgnored $standard $options $params
+    $command $filesAllowed $filesIgnored $standardPath $standard $options $params
 
     if [ $? -ne 0 ]
     then
