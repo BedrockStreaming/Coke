@@ -5,5 +5,8 @@
     "require": {
         "instaclick/php-code-sniffer": "dev-master"
     },
+    "suggest": {
+        "instaclick/symfony2-coding-standard": "dev-master"
+    },
     "bin": ["coke"]
 }
