@@ -155,14 +155,14 @@ fi
 
 if [ -n "$standardPath" ]
 then
-    standardPath="--config-set installed_paths $standardPath"
+    $command --config-set installed_paths $standardPath
 fi
 
 # Punch it!
 
 if [ -n "$filesAllowed" ]
 then
-    $command $filesAllowed $filesIgnored $standardPath $standard $options $params
+    $command $filesAllowed $filesIgnored $standard $options $params
 
     if [ $? -ne 0 ]
     then
@@ -173,3 +173,8 @@ else
 fi
 
 success "All files match with \"${standard:11}\" requirements"
+
+if [ -n "$standardPath" ]
+then
+    $command --config-delete installed_paths
+fi
