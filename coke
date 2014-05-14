@@ -6,7 +6,7 @@ options=""
 standard=""
 standardPath=""
 
-composerCommand="vendor/squizlabs/php_codesniffer/scripts/phpcs"
+composerCommand="vendor/instaclick/php-code-sniffer/scripts/phpcs"
 
 command="phpcs";
 if [ -e "$composerCommand" ]

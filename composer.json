@@ -3,7 +3,7 @@
     "description": "PHP Code Sniffer configurator",
     "license": "MIT",
     "require": {
-        "squizlabs/php_codesniffer": "1.*"
+        "instaclick/php-code-sniffer": "dev-master"
     },
     "bin": ["coke"]
 }
