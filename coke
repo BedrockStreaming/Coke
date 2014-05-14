@@ -64,6 +64,14 @@ function info
     echo "[$(tput bold)$(tput setaf 4)INFO$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
 }
 
+function debug
+{
+    if [ "$verbose" -eq 1 ]
+    then
+        info "$1"
+    fi
+}
+
 # Résolution des options
 
 while [ $# -ne 0 ]
@@ -134,20 +142,19 @@ else
     warning "No config file found"
 fi
 
-if [ "$verbose" -eq 1 ]
-then
-    info "Starting sniffing"
-fi
+debug "Starting sniffing"
 
 # Prepare command
 
 if [ -n "$filesIgnored" ]
 then
+    debug "Ignore files \"$filesIgnored\""
     filesIgnored="--ignore=$filesIgnored"
 fi
 
 if [ -n "$standard" ]
 then
+    debug "Standard used is \"$standard\""
     standard="--standard=$standard"
 else
     fail "No coding standard definition provided"
@@ -155,6 +162,7 @@ fi
 
 if [ -n "$standardPath" ]
 then
+    debug "Change standard path to \"$standardPath\""
     $command --config-set installed_paths $standardPath
 fi
 
@@ -162,6 +170,8 @@ fi
 
 if [ -n "$filesAllowed" ]
 then
+    debug "Files allowed : \"$filesAllowed\""
+    
     $command $filesAllowed $filesIgnored $standard $options $params
 
     if [ $? -ne 0 ]
@@ -176,5 +186,6 @@ success "All files match with \"${standard:11}\" requirements"
 
 if [ -n "$standardPath" ]
 then
+    debug "Reset standard path"
     $command --config-delete installed_paths
 fi
