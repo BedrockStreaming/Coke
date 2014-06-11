@@ -41,27 +41,41 @@ function ignore
     fi
 }
 
+function output
+{
+    OUTPUT="[%s%s$1%s] %s$2%s"
+
+    if [ -t 1 ] && [ $- != "*i*" ]
+    then
+        OUTPUT=$(printf "$OUTPUT" "$(tput bold)" "$(tput setaf $3)" "$(tput sgr0)" "$(tput setaf $4)" "$(tput sgr0)" )
+    else
+        OUTPUT=$(printf "$OUTPUT" "" "" "" "" "" )
+    fi
+
+    echo "$OUTPUT"
+}
+
 function success
 {
-    echo "[$(tput bold)$(tput setaf 2)SUCCESS$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    output "SUCCESS" "$1" 2 6
     exit 0
 }
 
 function fail
 {
-    echo "[$(tput bold)$(tput setaf 1)FAIL$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    output "FAIL" "$1" 1 6
     exit 1
 }
 
 function warning
 {
-    echo "[$(tput bold)$(tput setaf 3)WARNING$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    output "WARNING" "$1" 3 6
     exit 0
 }
 
 function info
 {
-    echo "[$(tput bold)$(tput setaf 4)INFO$(tput sgr0)] $(tput setaf 6)$1$(tput sgr0)"
+    output "INFO" "$1" 4 6
 }
 
 function debug
