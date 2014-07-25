@@ -23,11 +23,14 @@ verbose=0
 
 function allow
 {
-    if [ -z "$filesAllowed" ]
+    if [ -e "$1" ]
     then
-        filesAllowed="$1"
-    else
-        filesAllowed="$filesAllowed $1"
+        if [ -z "$filesAllowed" ]
+        then
+            filesAllowed="$1"
+        else
+            filesAllowed="$filesAllowed $1"
+        fi
     fi
 }
 
@@ -185,7 +188,7 @@ fi
 if [ -n "$filesAllowed" ]
 then
     debug "Files allowed : \"$filesAllowed\""
-    
+
     $command $filesAllowed $filesIgnored $standard $options $params
 
     if [ $? -ne 0 ]
