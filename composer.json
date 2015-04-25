@@ -3,7 +3,7 @@
     "description": "PHP Code Sniffer configurator",
     "license": "MIT",
     "require": {
-        "squizlabs/php_codesniffer": "~1.5"
+        "squizlabs/php_codesniffer": "~2.3"
     },
     "suggest": {
         "m6web/symfony2-coding-standard": "Symfony2 PHP CodeSniffer Coding Standard"
