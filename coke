@@ -5,21 +5,16 @@ params=""
 options=""
 standard=""
 standardPath=""
-
-composerCommand="vendor/squizlabs/php_codesniffer/scripts/phpcs"
-
 command="phpcs";
-if [ -e "$composerCommand" ]
-then
-  command="$composerCommand"
-fi
-
+commandPath=""
+composerPath="vendor/squizlabs/php_codesniffer/scripts/"
 filesAllowed=""
 filesIgnored=""
 
 ignored=0
 allowed=0
 verbose=0
+fix=0
 
 function allow
 {
@@ -89,8 +84,7 @@ function debug
     fi
 }
 
-# Résolution des options
-
+# Resolve options
 while [ $# -ne 0 ]
 do
     CUR_PARAM="$1"
@@ -107,6 +101,9 @@ do
         elif [ "${CUR_PARAM:2:14}" = "standard-path=" ]
         then
             standardPath="${CUR_PARAM:16}"
+        elif [ "${CUR_PARAM:2:5}" = "fix" ]
+        then
+            fix=1
         else
             params="$params $CUR_PARAM"
         fi
@@ -115,6 +112,9 @@ do
         case "${CUR_PARAM:1:1}" in
             v)
                 verbose=1
+            ;;
+            f)
+                fix=1
             ;;
         esac
 
@@ -127,8 +127,20 @@ do
     shift
 done
 
-# Resolve files to test
+# Resolve commands path to use
+if [ -d "$composerPath" ]
+then
+  debug "Command path used is \"$composerPath\""
+  commandPath="$composerPath"
+fi
 
+if [ $fix  -eq 1 ]
+then
+    debug "Use phpcbf command instead of phpcs"
+    command="phpcbf"
+fi
+
+# Resolve files to test
 if [ -e "$file" ]
 then
     output=$( grep "^[^\#]" $file )
@@ -180,7 +192,7 @@ fi
 if [ -n "$standardPath" ]
 then
     debug "Change standard path to \"$standardPath\""
-    $command --config-set installed_paths $standardPath
+    $commandPath$command --config-set installed_paths $standardPath
 fi
 
 # Punch it!
@@ -189,7 +201,7 @@ if [ -n "$filesAllowed" ]
 then
     debug "Files allowed : \"$filesAllowed\""
 
-    $command $filesAllowed $filesIgnored $standard $options $params
+    $commandPath$command $filesAllowed $filesIgnored $standard $options $params
 
     if [ $? -ne 0 ]
     then
@@ -204,5 +216,5 @@ success "All files match with \"${standard:11}\" requirements"
 if [ -n "$standardPath" ]
 then
     debug "Reset standard path"
-    $command --config-delete installed_paths
+    $commandPath$command --config-delete installed_paths
 fi
