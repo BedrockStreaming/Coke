@@ -86,6 +86,26 @@ Then you can call coke via :
 ./bin/coke
 ```
 
+## Git pre-commit hook
+
+You can use a dedicated [pre-commit hook](https://gist.github.com/JJK801/5867810) :
+
+```
+$ wget --output-document=.git/hooks/pre-commit https://gist.githubusercontent.com/JJK801/5867810/raw/f26ec4778273b3f7140428252ab31951de2faba4/pre-commit.sh
+```
+
+Or
+
+```
+$ curl -L https://gist.githubusercontent.com/JJK801/5867810/raw/f26ec4778273b3f7140428252ab31951de2faba4/pre-commit.sh > .git/hooks/pre-commit
+```
+
+Then
+
+```
+$ chmod +x .git/hooks/pre-commit
+```
+
 ## Credits
 
 Developped by the [Cytron Team](http://cytron.fr/) of [M6 Web](http://tech.m6web.fr/).
