@@ -43,7 +43,7 @@ function output
 {
     OUTPUT="[%s%s$1%s] %s$2%s"
 
-    if [ -t 1 ] && [ $- != "*i*" ] && which tput >/dev/null
+    if [ -t 1 ] && [ $- != "*i*" ] && [ -n "$TERM" ] && which tput >/dev/null
     then
         OUTPUT=$(printf "$OUTPUT" "$(tput bold)" "$(tput setaf $3)" "$(tput sgr0)" "$(tput setaf $4)" "$(tput sgr0)" )
     else
