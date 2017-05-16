@@ -19,6 +19,9 @@ standard=Symfony2
 # Verbose mode (optional - default: false)
 verbose=true
  
+# Only Git changed mode (optional - default: false)
+only-git-changed=true
+ 
 # White list of files and directories (optional)
 src/
 test.php
@@ -47,6 +50,7 @@ The order of arguments is not important
 `src test.php`                   Files/Directories to include in the check  
 `--standard=Symfony2`            Standard to use for check  
 `--ignore=Tests,src/OldFile.php` URL patterns to ignore in the check  
+`--only-git-changed`             Check only changed files  
 `-v`                             Use verbose mode  
 
 

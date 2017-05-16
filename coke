@@ -15,6 +15,7 @@ ignored=0
 allowed=0
 verbose=0
 fix=0
+onlyGitChanged=0
 
 function allow
 {
@@ -104,6 +105,9 @@ do
         elif [ "${CUR_PARAM:2:5}" = "fix" ]
         then
             fix=1
+        elif [ "${CUR_PARAM:2:16}" = "only-git-changed" ]
+        then
+            onlyGitChanged=1
         else
             params="$params $CUR_PARAM"
         fi
@@ -159,6 +163,9 @@ then
         elif  [ "$verbose" -eq 0 ] && [ "${ligne:0:8}" = "verbose=" ] && [ "${ligne:8}" = "true" ]
         then
             verbose=1
+        elif  [ "$onlyGitChanged" -eq 0 ] && [ "${ligne:0:17}" = "only-git-changed=" ] && [ "${ligne:17}" = "true" ]
+        then
+            onlyGitChanged=1
         elif [ "$ignored" -eq 0 ] && [ "${ligne:0:1}" = "!" ]
         then
             ignore "${ligne:1}"
@@ -193,6 +200,37 @@ if [ -n "$standardPath" ]
 then
     debug "Change standard path to \"$standardPath\""
     $commandPath$command --config-set installed_paths $standardPath
+fi
+
+# Check Git changes
+
+if [ $onlyGitChanged -eq 1 ]
+then
+    command -v git >/dev/null 2>&1 || { fail "Cannot find git. Git is required when --only-git-changed is used."; }
+
+    filesAllowedAndChanged=""
+    for file in $(git --no-pager diff --name-only --diff-filter=MARC)
+    do
+        allowed=0
+
+        for ligne in $filesAllowed
+        do
+            if [ "${ligne:0:1}" = '!' ] && [[ "$file" == *"${ligne:1}"* ]]
+            then
+                continue 2
+            elif [[ "$file" == "$ligne"* ]]
+            then
+                allowed=1
+            fi
+        done
+
+        if [ "$allowed" -eq 1 ]
+        then
+            filesAllowedAndChanged="$filesAllowedAndChanged $file"
+        fi
+    done
+
+    filesAllowed=$filesAllowedAndChanged
 fi
 
 # Punch it!
