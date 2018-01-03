@@ -7,7 +7,7 @@ standard=""
 standardPath=""
 command="phpcs";
 commandPath=""
-composerPath="vendor/squizlabs/php_codesniffer/scripts/"
+composerPath="vendor/squizlabs/php_codesniffer/bin/"
 filesAllowed=""
 filesIgnored=""
 
